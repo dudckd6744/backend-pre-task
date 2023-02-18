@@ -10,21 +10,32 @@ async function createUser(payload) {
 }
 
 async function findAllUser(payload) {
-  // const options = {
-  //   offset,
-  //   limit,
-  //   order,
-  // distinct: true,
-  //   where: "where",
-  // };
-  const result = await User.findAndCountAll({
-    distinct: true,
+  let { current, pageSize, sort } = payload;
 
+  const childrenSort = sort[0].split("_");
+
+  if (childrenSort.includes("career")) {
+    sort = [Career, childrenSort[1], sort[1]];
+  }
+
+  const options = {
+    offset: (current - 1) * pageSize,
+    limit: Number(pageSize),
+    order: [sort, [Career, "joinDate", "ASC"]],
+    distinct: true,
+  };
+
+  const result = await User.findAndCountAll({
+    ...options,
     include: [{ model: Career }],
-    order: [
-      ["name", "DESC"],
-      [Career, "joinDate", "DESC"],
-    ],
+  });
+
+  result.rows.forEach((row, i) => {
+    if (row.careers.length > 0) {
+      console.log(row.get().careers);
+      row.get().career_name = row.careers[0].name;
+      row.get().career_resignationDate = row.careers[0].resignationDate;
+    }
   });
 
   return result;

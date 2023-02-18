@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize("jober_pre_task", "root", "112213", {
+const sequelize = new Sequelize("jober_pre_task", "root", "12341234", {
   host: "127.0.0.1",
   dialect: "mysql",
 });

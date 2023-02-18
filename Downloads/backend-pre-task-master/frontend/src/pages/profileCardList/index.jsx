@@ -58,7 +58,9 @@ const ProfileCardList = () => {
   const listFetchDependencies = [paginationInfo, orderInfo, columnDefs];
   const fetchProfileList = useCallback(
     async (targetPage, sort = ["name", "asc"]) => {
+      if (typeof sort === "number") sort = ["name", "asc"];
       // TODO: Change your api
+      console.log(sort);
       const response = await request({
         method: "GET",
         url: "http://localhost:4000/api/user",
@@ -70,8 +72,8 @@ const ProfileCardList = () => {
         },
       });
 
-      if (!response || !response.result.rows) return;
-
+      if (!response || response.rows.length === 0) return;
+      setRowData(response.rows);
       setPaginationInfo((prev) => ({
         ...prev,
         current: targetPage || prev.current,
@@ -88,18 +90,18 @@ const ProfileCardList = () => {
       method: "GET",
       url: "http://localhost:4000/api/profile-column",
     });
-    if (!response || !response.list) return;
+    if (!response || response.list.length === 0) return;
 
     setColumnDefs([
       ...response.list.map(({ label, dataKey, parentDataKey }) => ({
         headerName: label,
-        field: parentDataKey ? `${parentDataKey}.${dataKey}` : dataKey,
+        field:
+          parentDataKey !== "null" ? `${parentDataKey}_${dataKey}` : dataKey,
         cellClass: "default-cell",
         comparator: () => 0,
       })),
     ]);
   }, []);
-
   useEffect(() => {
     fetchProfileList();
     fetchAvailableColumns();
@@ -124,6 +126,7 @@ const ProfileCardList = () => {
 
   const handleSortChange = useCallback((e) => {
     const columnState = e.columnApi.getColumnState();
+
     const sortedColumn = columnState.find(({ sort }) => !!sort);
     if (!sortedColumn) {
       fetchProfileList();

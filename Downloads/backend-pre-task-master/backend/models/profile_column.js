@@ -21,13 +21,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       parentDataKey: {
         type: DataTypes.STRING(100),
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
       tableName: "profile_column",
       paranoid: true,
       createdAt: "created_at",
+      underscored: true,
       updatedAt: "updated_at",
       deletedAt: "deleted_at",
     }

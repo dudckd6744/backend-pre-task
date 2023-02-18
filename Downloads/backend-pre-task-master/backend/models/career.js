@@ -7,15 +7,19 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      userId: {
+      user_id: {
         type: DataTypes.INTEGER,
+      },
+      name: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
       },
       duty: {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
       joinDate: {
-        type: DataTypes.DATE(),"",
+        type: DataTypes.DATE(),
         allowNull: false,
       },
       resignationDate: {
@@ -26,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: "career",
       paranoid: true,
+      underscored: true,
       createdAt: "created_at",
       updatedAt: "updated_at",
       deletedAt: "deleted_at",

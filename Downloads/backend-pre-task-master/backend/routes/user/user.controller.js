@@ -19,6 +19,7 @@ router.get(
   "/",
   asyncWrapper(async (req, res) => {
     const payload = req.query;
+
     const result = await userService.findAllUser(payload);
 
     res.json({ ...result });
