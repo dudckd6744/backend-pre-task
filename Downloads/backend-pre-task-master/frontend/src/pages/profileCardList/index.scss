@@ -1,0 +1,19 @@
+.profile-card-list {
+  .header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .ag-theme-alpine {
+    width: 100%;
+
+    .default-cell {
+      text-align: left;
+    }
+  }
+
+  .pagination {
+    margin-top: 12px;
+    text-align: right;
+  }
+}

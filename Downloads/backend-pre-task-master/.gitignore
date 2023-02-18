@@ -1,0 +1,12 @@
+# packages
+/frontend/node_modules
+/backend/node_modules
+
+# IDE
+.idea/
+.history/
+.vscode/
+
+*.swp
+
+.tempData.js
