@@ -1,12 +1,8 @@
-import React from 'react';
-import {
-  Switch,
-  Route,
-  BrowserRouter as Router,
-} from 'react-router-dom';
+import React from "react";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 
-import ProfileCardList from './pages/profileCardList';
-import ProfileCardDetail from './pages/ProfileCardDetail';
+import ProfileCardList from "./pages/profileCardList";
+import ProfileCardDetail from "./pages/ProfileCardDetail";
 
 const App = () => (
   <Router>
