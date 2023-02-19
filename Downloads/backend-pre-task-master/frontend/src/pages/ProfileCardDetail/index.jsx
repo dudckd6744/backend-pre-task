@@ -1,16 +1,14 @@
-import React, {
-  useState, useCallback, useEffect, useMemo,
-} from 'react';
-import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import { Button } from 'antd';
+import React, { useState, useCallback, useEffect, useMemo } from "react";
+import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
+import { Button } from "antd";
 
-import useAxios from '../../context/hooks/useAxios';
+import useAxios from "../../context/hooks/useAxios";
 
-import SingleData from './components/SingleData';
-import ListData from './components/ListData';
+import SingleData from "./components/SingleData";
+import ListData from "./components/ListData";
 
-import './index.scss';
+import "./index.scss";
 
 const ProfileCardDetail = (props) => {
   const { profileCardId } = props.match.params;
@@ -23,34 +21,37 @@ const ProfileCardDetail = (props) => {
   const fetchProfileCardDetail = useCallback(async (fetchTargetId) => {
     // TODO: Change your api
     const response = await request({
-      method: 'GET',
-      url: '/api/??',
+      method: "GET",
+      url: `http://localhost:4000/api/user/${fetchTargetId}`,
     });
-    if (!response || !response.profileCardDetail) return;
 
-    setProfileDetail(response.profileCardDetail);
+    if (!response || !response.result) return;
+
+    setProfileDetail(response.result);
   }, []);
 
   useEffect(() => {
     fetchProfileCardDetail(profileCardId);
-  }, [profileCardId]);
+  }, []);
 
   const deleteProfileCard = useCallback(async () => {
     // TODO: Change your api
     const response = await request({
-      method: 'POST',
-      url: '/api/??',
+      method: "POST",
+      url: "/api/??",
     });
     if (!response) return;
 
-    history.push('/');
+    history.push("/");
   }, [profileCardId]);
 
   const singleDataProps = useMemo(() => {
     if (!profileDetail || !profileDetail.valueStructures) return {};
 
     const { value, valueStructures: allDataStructures } = profileDetail;
-    const singleDataStructures = allDataStructures.filter(({ type, parentDataKey }) => type !== 'list' && !parentDataKey);
+    const singleDataStructures = allDataStructures.filter(
+      ({ type, parentDataKey }) => type !== "list" && !parentDataKey
+    );
     return {
       value,
       structures: singleDataStructures,
@@ -61,12 +62,16 @@ const ProfileCardDetail = (props) => {
     if (!profileDetail || !profileDetail.valueStructures) return {};
 
     const { value, valueStructures: allDataStructures } = profileDetail;
-    const listStructures = allDataStructures.filter(({ type }) => type === 'list');
+    const listStructures = allDataStructures.filter(
+      ({ type }) => type === "list"
+    );
     const listWithChildrenStructures = listStructures.map((listStructure) => {
       const { dataKey: targetDataKey } = listStructure;
       return {
         ...listStructure,
-        childrenStructures: allDataStructures.filter(({ parentDataKey }) => parentDataKey === targetDataKey),
+        childrenStructures: allDataStructures.filter(
+          ({ parentDataKey }) => parentDataKey === targetDataKey
+        ),
       };
     });
     return {
@@ -75,37 +80,31 @@ const ProfileCardDetail = (props) => {
     };
   }, [profileDetail]);
 
-  const onSaveValue = useCallback(async (newValue, parentDatKey, itemIndex) => {
-    // TODO: Change your api
-    const response = await request({
-      method: 'POST',
-      url: '/api/??',
-    });
-    if (!response) return;
+  const onSaveValue = useCallback(
+    async (newValue, parentDatKey, itemIndex) => {
+      // TODO: Change your api
+      const response = await request({
+        method: "POST",
+        url: "/api/??",
+      });
+      if (!response) return;
 
-    fetchProfileCardDetail(profileCardId);
-  }, [profileCardId]);
+      fetchProfileCardDetail(profileCardId);
+    },
+    [profileCardId]
+  );
 
   return (
     <div className="profile-card-detail">
       <div className="header">
         <h1>{profileDetail.name}</h1>
-        <Button
-          type="danger"
-          onClick={deleteProfileCard}
-        >
+        <Button type="danger" onClick={deleteProfileCard}>
           연락처 삭제
         </Button>
       </div>
       <div className="data-section">
-        <SingleData
-          {...singleDataProps}
-          onSaveValue={onSaveValue}
-        />
-        <ListData
-          {...listDataProps}
-          onSaveValue={onSaveValue}
-        />
+        <SingleData {...singleDataProps} onSaveValue={onSaveValue} />
+        <ListData {...listDataProps} onSaveValue={onSaveValue} />
       </div>
     </div>
   );

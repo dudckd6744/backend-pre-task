@@ -19,6 +19,7 @@ const DetailPageLink = React.memo((props) => {
   const {
     data: { id, name },
   } = props;
+
   if (!id) return null;
 
   return <Link to={`/${id}`}>{name}</Link>;
@@ -93,6 +94,12 @@ const ProfileCardList = () => {
     if (!response || response.list.length === 0) return;
 
     setColumnDefs([
+      {
+        headerName: "이름",
+        field: "name",
+        cellClass: "default-cell",
+        cellRenderer: DetailPageLink,
+      },
       ...response.list.map(({ label, dataKey, parentDataKey }) => ({
         headerName: label,
         field:

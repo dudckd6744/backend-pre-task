@@ -26,4 +26,38 @@ router.get(
   })
 );
 
+router.get(
+  "/:id",
+  asyncWrapper(async (req, res) => {
+    const userId = req.params.id;
+
+    const result = await userService.findOneUser(userId);
+
+    res.json({ result });
+  })
+);
+
+router.put(
+  "/:id",
+  asyncWrapper(async (req, res) => {
+    const userId = req.params.id;
+    const payload = req.body;
+
+    const result = await userService.updateUser(userId, payload);
+
+    res.json({ success: true });
+  })
+);
+
+router.delete(
+  "/:id",
+  asyncWrapper(async (req, res) => {
+    const userId = req.params.id;
+
+    const result = await userService.deleteUser(userId);
+
+    res.json({ success: true });
+  })
+);
+
 module.exports = router;

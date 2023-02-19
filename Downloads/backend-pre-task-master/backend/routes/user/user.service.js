@@ -41,4 +41,39 @@ async function findAllUser(payload) {
   return result;
 }
 
-module.exports = { createUser, findAllUser };
+async function findOneUser(id) {
+  const result = await User.findOne({
+    where: { id },
+    include: [{ model: Career }],
+  });
+
+  if (!result) throw new Error("not exist User");
+
+  return result;
+}
+
+async function updateUser(id, payload) {
+  const result = await User.update({ ...payload }, { where: { id } });
+
+  if (result[0] === 0) {
+    throw new Error("failed update User");
+  }
+}
+
+async function deleteUser(id) {
+  const user = await User.findOne({ where: { id } });
+
+  if (!user) throw new Error("not exist User");
+
+  await User.destroy({ where: { id } });
+
+  await Career.destroy({ where: { userId: id } });
+}
+
+module.exports = {
+  createUser,
+  findAllUser,
+  findOneUser,
+  updateUser,
+  deleteUser,
+};

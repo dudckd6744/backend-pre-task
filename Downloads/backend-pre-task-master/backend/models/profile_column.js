@@ -34,11 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  ProfileColumn.associate = (models) => {
-    // ProfileColumn.belongsTo(models.user, {
-    //   foreignKey: "userId",
-    // });
-  };
+  ProfileColumn.associate = (models) => {};
 
   return ProfileColumn;
 };
